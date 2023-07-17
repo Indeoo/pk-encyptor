@@ -16,11 +16,13 @@ def generate_key(password):
     key = base64.urlsafe_b64encode(kdf.derive(password))
     return key
 
+
 def encrypt_private_key(private_key, password):
     key = generate_key(password)
     fernet = Fernet(key)
     encrypted_private_key = fernet.encrypt(private_key.encode())
     return encrypted_private_key
+
 
 def read_private_keys(filename):
     with open(filename, 'r') as file:
@@ -28,7 +30,8 @@ def read_private_keys(filename):
     private_keys = [key.strip() for key in private_keys]
     return private_keys
 
-def write_encrypted_data(filename, encrypted_data):
+
+def write_data_to_file(filename, encrypted_data):
     with open(filename, 'w') as file:
         for encrypted_key in encrypted_data:
             file.write(encrypted_key.decode() + '\n')
@@ -42,6 +45,6 @@ if __name__ == '__main__':
         encrypted_key = encrypt_private_key(private_key, password)
         encrypted_data.append(encrypted_key)
 
-    write_encrypted_data('cryptography.txt', encrypted_data)
+    write_data_to_file('cryptography.txt', encrypted_data)
 
     print("Шифрование завершено. Зашифрованные данные сохранены в cryptography.txt.")
